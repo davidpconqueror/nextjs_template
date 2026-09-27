@@ -7,7 +7,6 @@ import {
   Palette,
   Terminal,
   ExternalLink,
-  Code2,
   CheckCircle2,
   Copy,
   Check,
@@ -17,6 +16,14 @@ import {
   Heart,
   ShieldCheck,
   Zap,
+  Database,
+  Plus,
+  Trash2,
+  RefreshCw,
+  Minus,
+  RotateCcw,
+  Server,
+  Cpu,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -26,6 +33,7 @@ import {
   CardHeader,
   CardTitle,
   CardDescription,
+  CardContent,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import {
@@ -53,8 +61,52 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ThemeToggle } from "@/components/theme-toggle";
 
+import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
+import {
+  increment,
+  decrement,
+  incrementByAmount,
+  reset,
+} from "@/lib/redux/slices/counterSlice";
+import {
+  useGetItemsQuery,
+  useAddItemMutation,
+  useDeleteItemMutation,
+} from "@/lib/redux/services/itemsApi";
+
 export default function Home() {
   const [copiedCmd, setCopiedCmd] = React.useState<string | null>(null);
+  const [newItemName, setNewItemName] = React.useState("");
+  const [newItemCategory, setNewItemCategory] = React.useState("");
+
+  // Redux Client State
+  const count = useAppSelector((state) => state.counter.value);
+  const dispatch = useAppDispatch();
+
+  // RTK Query Server State
+  const {
+    data: items,
+    isLoading: isItemsLoading,
+    isFetching: isItemsFetching,
+    refetch: refetchItems,
+  } = useGetItemsQuery();
+  const [addItem, { isLoading: isAddingItem }] = useAddItemMutation();
+  const [deleteItem] = useDeleteItemMutation();
+
+  const handleAddItem = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newItemName.trim()) return;
+
+    await addItem({
+      name: newItemName.trim(),
+      description: "Added dynamically via RTK Query mutation.",
+      category: newItemCategory.trim() || "User Created",
+      status: "active",
+    });
+
+    setNewItemName("");
+    setNewItemCategory("");
+  };
 
   const copyToClipboard = (cmd: string) => {
     navigator.clipboard.writeText(cmd);
@@ -65,33 +117,39 @@ export default function Home() {
   const stackItems = [
     {
       name: "Next.js",
-      version: "App Router & Turbopack",
-      description: "React framework with fast builds and server components.",
+      version: "App Router",
+      description: "React framework with Turbopack and React Server Components.",
       icon: Zap,
     },
     {
       name: "Tailwind CSS",
       version: "v4.0+",
-      description: "Next-generation CSS utility-first framework.",
+      description: "Next-gen CSS framework with dynamic CSS variables.",
       icon: Palette,
     },
     {
       name: "shadcn/ui",
-      version: "Customizable Components",
-      description: "Accessible, composable UI building blocks.",
+      version: "UI Components",
+      description: "Composable and accessible primitives built on Base UI.",
       icon: Layers,
     },
     {
       name: "Lucide React",
       version: "Iconography",
-      description: "Crisp, flexible and beautiful vector icons.",
+      description: "Modern, lightweight, and tree-shakeable icons.",
       icon: Sparkles,
     },
     {
-      name: "Yarn",
-      version: "Modern (Berry v4)",
-      description: "Fast, reliable and deterministic package management.",
-      icon: Terminal,
+      name: "Redux Toolkit",
+      version: "Client State",
+      description: "Predictable state container with makeStore & typed hooks.",
+      icon: Cpu,
+    },
+    {
+      name: "RTK Query",
+      version: "Server State",
+      description: "Powerful data fetching, caching, and cache invalidation.",
+      icon: Database,
     },
   ];
 
@@ -109,27 +167,27 @@ export default function Home() {
                 Next.js Template
               </span>
               <span className="ml-2 hidden rounded-md bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground sm:inline-block">
-                Yarn Ready
+                Redux + RTK Query
               </span>
             </div>
           </div>
 
           <div className="flex items-center gap-2 sm:gap-3">
             <a
+              href="https://redux-toolkit.js.org/rtk-query/overview"
+              target="_blank"
+              rel="noreferrer"
+              className="text-xs sm:text-sm font-medium text-muted-foreground hover:text-foreground transition-colors hidden md:block"
+            >
+              RTK Query Docs
+            </a>
+            <a
               href="https://ui.shadcn.com"
               target="_blank"
               rel="noreferrer"
               className="text-xs sm:text-sm font-medium text-muted-foreground hover:text-foreground transition-colors hidden md:block"
             >
-              shadcn/ui Docs
-            </a>
-            <a
-              href="https://nextjs.org/docs"
-              target="_blank"
-              rel="noreferrer"
-              className="text-xs sm:text-sm font-medium text-muted-foreground hover:text-foreground transition-colors hidden md:block"
-            >
-              Next.js Docs
+              shadcn/ui
             </a>
             <ThemeToggle />
           </div>
@@ -138,23 +196,23 @@ export default function Home() {
 
       {/* Hero Section */}
       <main className="flex-1">
-        <section className="container mx-auto max-w-6xl px-4 py-16 sm:py-24 sm:px-6">
+        <section className="container mx-auto max-w-6xl px-4 py-16 sm:py-20 sm:px-6">
           <div className="mx-auto flex max-w-3xl flex-col items-center text-center">
             <Badge variant="secondary" className="mb-4 px-3 py-1 gap-1.5 text-xs font-medium">
               <Sparkles className="h-3.5 w-3.5 text-primary" />
-              Production-Ready Starter Kit
+              Full-Stack State Management Ready
             </Badge>
 
             <h1 className="text-4xl font-extrabold tracking-tight sm:text-6xl text-foreground">
-              Next.js + Tailwind +{" "}
-              <span className="bg-gradient-to-r from-blue-600 via-violet-600 to-indigo-600 bg-clip-text text-transparent dark:from-blue-400 dark:via-violet-400 dark:to-indigo-400">
-                shadcn/ui
+              Next.js + Redux +{" "}
+              <span className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent dark:from-blue-400 dark:via-indigo-400 dark:to-purple-400">
+                RTK Query
               </span>
             </h1>
 
             <p className="mt-6 text-base text-muted-foreground sm:text-lg leading-relaxed max-w-2xl">
-              Configured with <strong>Yarn</strong>, modern <strong>Tailwind CSS v4</strong>, 
-              accessible <strong>shadcn/ui</strong> components, and <strong>Lucide React</strong> icons.
+              Configured with <strong>Redux Toolkit</strong> client state, <strong>RTK Query</strong> server-side cache,{" "}
+              <strong>Tailwind CSS v4</strong>, <strong>shadcn/ui</strong>, and <strong>Yarn Berry</strong>.
             </p>
 
             {/* Quick Actions */}
@@ -172,35 +230,34 @@ export default function Home() {
                   <DialogHeader>
                     <DialogTitle className="flex items-center gap-2">
                       <ShieldCheck className="h-5 w-5 text-primary" />
-                      Welcome to your new project!
+                      Redux & RTK Query Configured
                     </DialogTitle>
                     <DialogDescription>
-                      This dialog is powered by shadcn/ui. You can customize any component in{" "}
+                      This starter includes Next.js App Router compatible Redux store setup using{" "}
                       <code className="text-foreground bg-muted px-1.5 py-0.5 rounded text-xs">
-                        src/components/ui
+                        makeStore()
                       </code>
                       .
                     </DialogDescription>
                   </DialogHeader>
                   <div className="py-2 text-sm text-muted-foreground space-y-2">
-                    <p>Included in this starter:</p>
+                    <p>Included Architecture:</p>
                     <ul className="list-disc list-inside space-y-1 text-xs">
-                      <li>Next.js App Router with TypeScript</li>
-                      <li>Tailwind CSS v4 with CSS variables</li>
-                      <li>Dark / Light Mode theme switching</li>
-                      <li>Pre-installed shadcn components</li>
-                      <li>Lucide icons library</li>
+                      <li>Typed Hooks (useAppDispatch, useAppSelector, useAppStore)</li>
+                      <li>Base RTK Query API slice with auto tag invalidation</li>
+                      <li>Client-side counter slice demonstration</li>
+                      <li>Next.js route handler backend integration (/api/items)</li>
                     </ul>
                   </div>
-                  <DialogFooter showCloseButton>
+                  <DialogFooter>
                     <Button
                       onClick={() =>
-                        copyToClipboard("npx shadcn@latest add sheet")
+                        copyToClipboard("yarn dev")
                       }
                       className="gap-1.5"
                     >
                       <Copy className="h-3.5 w-3.5" />
-                      Copy Add Command
+                      Copy `yarn dev`
                     </Button>
                   </DialogFooter>
                 </DialogContent>
@@ -211,12 +268,12 @@ export default function Home() {
                   render={
                     <Button variant="outline" size="lg" className="gap-2 cursor-pointer">
                       <Settings className="h-4 w-4" />
-                      Dropdown Menu
+                      Quick Commands
                     </Button>
                   }
                 />
-                <DropdownMenuContent align="center" className="w-48">
-                  <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                <DropdownMenuContent align="center" className="w-56">
+                  <DropdownMenuLabel>Developer Actions</DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem
                     className="cursor-pointer gap-2"
@@ -236,11 +293,11 @@ export default function Home() {
                   <DropdownMenuItem
                     className="cursor-pointer gap-2"
                     onClick={() =>
-                      window.open("https://github.com", "_blank")
+                      window.open("https://redux-toolkit.js.org", "_blank")
                     }
                   >
                     <ExternalLink className="h-4 w-4" />
-                    GitHub
+                    Redux Toolkit Docs
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -255,7 +312,7 @@ export default function Home() {
                   }
                 />
                 <TooltipContent>
-                  <p>Tooltips work seamlessly across devices!</p>
+                  <p>Client & Server state both working in harmony!</p>
                 </TooltipContent>
               </Tooltip>
             </div>
@@ -282,33 +339,194 @@ export default function Home() {
                 </Card>
               );
             })}
+          </div>
 
-            {/* Quick Component Gallery Card */}
-            <Card className="transition-all hover:shadow-md hover:border-primary/40">
-              <CardHeader>
+          {/* Redux Toolkit & RTK Query Live Showcase Grid */}
+          <div className="mt-16 grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* 1. Redux Client State: Counter Slice */}
+            <Card className="border-border shadow-sm">
+              <CardHeader className="pb-4">
                 <div className="flex items-center justify-between">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                    <Code2 className="h-5 w-5" />
+                  <div className="flex items-center gap-2">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-500/10 text-indigo-500">
+                      <Cpu className="h-4 w-4" />
+                    </div>
+                    <div>
+                      <CardTitle className="text-lg">Redux Client State</CardTitle>
+                      <CardDescription className="text-xs">
+                        Managed with Redux Toolkit Slice
+                      </CardDescription>
+                    </div>
                   </div>
-                  <Badge variant="default" className="text-xs">
-                    Ready
+                  <Badge variant="secondary" className="font-mono text-xs">
+                    counterSlice.ts
                   </Badge>
                 </div>
-                <CardTitle className="text-lg mt-3">Pre-installed UI</CardTitle>
-                <CardDescription>
-                  Button, Card, Badge, Input, Dialog, Dropdown, Avatar, Tooltip & more.
-                </CardDescription>
               </CardHeader>
+
+              <CardContent className="space-y-6">
+                <div className="flex flex-col items-center justify-center rounded-xl bg-muted/40 p-6 border border-border/50">
+                  <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                    Current Redux Count
+                  </span>
+                  <div className="text-5xl font-black tracking-tight text-primary my-3">
+                    {count}
+                  </div>
+                  <div className="flex flex-wrap items-center justify-center gap-2 mt-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => dispatch(decrement())}
+                      className="gap-1"
+                    >
+                      <Minus className="h-3.5 w-3.5" /> -1
+                    </Button>
+                    <Button
+                      variant="default"
+                      size="sm"
+                      onClick={() => dispatch(increment())}
+                      className="gap-1"
+                    >
+                      <Plus className="h-3.5 w-3.5" /> +1
+                    </Button>
+                    <Button
+                      variant="secondary"
+                      size="sm"
+                      onClick={() => dispatch(incrementByAmount(5))}
+                    >
+                      +5
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => dispatch(reset())}
+                      className="gap-1 text-muted-foreground"
+                    >
+                      <RotateCcw className="h-3.5 w-3.5" /> Reset
+                    </Button>
+                  </div>
+                </div>
+
+                <div className="rounded-lg bg-muted/60 p-3 text-xs font-mono space-y-1">
+                  <div className="text-muted-foreground">{"// Accessing state via typed hook:"}</div>
+                  <div className="text-foreground">
+                    const count = useAppSelector((state) =&gt; state.counter.value);
+                  </div>
+                  <div className="text-muted-foreground pt-1">{"// Dispatching actions:"}</div>
+                  <div className="text-foreground">
+                    dispatch(increment());
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* 2. RTK Query Server State: Data Fetching & Mutations */}
+            <Card className="border-border shadow-sm">
+              <CardHeader className="pb-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-500/10 text-blue-500">
+                      <Server className="h-4 w-4" />
+                    </div>
+                    <div>
+                      <CardTitle className="text-lg">RTK Query Server State</CardTitle>
+                      <CardDescription className="text-xs">
+                        Cached server data via /api/items
+                      </CardDescription>
+                    </div>
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => refetchItems()}
+                    disabled={isItemsFetching}
+                    className="h-8 gap-1 text-xs"
+                  >
+                    <RefreshCw className={`h-3.5 w-3.5 ${isItemsFetching ? "animate-spin" : ""}`} />
+                    Refresh
+                  </Button>
+                </div>
+              </CardHeader>
+
+              <CardContent className="space-y-4">
+                {/* Add Item Form */}
+                <form onSubmit={handleAddItem} className="flex gap-2">
+                  <Input
+                    placeholder="New item name..."
+                    value={newItemName}
+                    onChange={(e) => setNewItemName(e.target.value)}
+                    className="text-xs h-9 flex-1"
+                  />
+                  <Input
+                    placeholder="Category (e.g. Core)"
+                    value={newItemCategory}
+                    onChange={(e) => setNewItemCategory(e.target.value)}
+                    className="text-xs h-9 w-32 hidden sm:block"
+                  />
+                  <Button
+                    type="submit"
+                    size="sm"
+                    disabled={isAddingItem || !newItemName.trim()}
+                    className="h-9 gap-1"
+                  >
+                    <Plus className="h-4 w-4" /> Add
+                  </Button>
+                </form>
+
+                {/* Items List */}
+                <div className="space-y-2 max-h-[220px] overflow-y-auto pr-1">
+                  {isItemsLoading ? (
+                    <div className="flex items-center justify-center py-8 text-xs text-muted-foreground gap-2">
+                      <RefreshCw className="h-4 w-4 animate-spin text-primary" />
+                      Loading cached items...
+                    </div>
+                  ) : items && items.length > 0 ? (
+                    items.map((item) => (
+                      <div
+                        key={item.id}
+                        className="flex items-center justify-between rounded-lg border border-border/60 bg-muted/20 p-2.5 text-xs transition-colors hover:bg-muted/40"
+                      >
+                        <div className="space-y-0.5">
+                          <div className="flex items-center gap-2">
+                            <span className="font-semibold text-foreground">{item.name}</span>
+                            <Badge variant="outline" className="text-[10px] px-1.5 py-0">
+                              {item.category}
+                            </Badge>
+                          </div>
+                          <p className="text-[11px] text-muted-foreground">{item.description}</p>
+                        </div>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => deleteItem(item.id)}
+                          aria-label={`Delete ${item.name}`}
+                          className="h-7 w-7 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+                        >
+                          <Trash2 className="h-3.5 w-3.5" />
+                        </Button>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="text-center py-6 text-xs text-muted-foreground">
+                      No items in store. Add one above!
+                    </div>
+                  )}
+                </div>
+
+                <div className="rounded-lg bg-muted/60 p-2.5 text-[11px] font-mono text-muted-foreground">
+                  const &#123; data, isLoading, refetch &#125; = useGetItemsQuery();
+                </div>
+              </CardContent>
             </Card>
           </div>
 
-          {/* Interactive Component Demo Section */}
+          {/* Interactive Component Playground */}
           <div className="mt-16 rounded-2xl border border-border bg-card p-6 sm:p-8 shadow-sm">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-border pb-6">
               <div>
-                <h2 className="text-2xl font-bold tracking-tight">Interactive Playground</h2>
+                <h2 className="text-2xl font-bold tracking-tight">shadcn/ui & Lucide Playground</h2>
                 <p className="text-sm text-muted-foreground mt-1">
-                  Preview how shadcn/ui components look and feel in both light & dark modes.
+                  Preview shadcn components with Lucide icons in both light & dark themes.
                 </p>
               </div>
               <div className="flex items-center gap-3">
@@ -358,7 +576,7 @@ export default function Home() {
                     <span className="text-muted-foreground">yarn run dev</span>
                     <button
                       onClick={() => copyToClipboard("yarn dev")}
-                      className="text-foreground hover:text-primary transition-colors flex items-center gap-1"
+                      className="text-foreground hover:text-primary transition-colors flex items-center gap-1 cursor-pointer"
                     >
                       {copiedCmd === "yarn dev" ? (
                         <>
@@ -420,7 +638,7 @@ export default function Home() {
       <footer className="border-t border-border/40 py-8 bg-muted/20">
         <div className="container mx-auto flex max-w-6xl flex-col sm:flex-row items-center justify-between gap-4 px-4 sm:px-6 text-xs text-muted-foreground">
           <p>
-            Built with Next.js, Tailwind CSS, shadcn/ui, Lucide React & Yarn.
+            Built with Next.js, Redux Toolkit, RTK Query, Tailwind CSS, shadcn/ui, Lucide React & Yarn.
           </p>
           <div className="flex items-center gap-4">
             <a
