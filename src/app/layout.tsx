@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Next.js Starter Template",
   description:
-    "Next.js template with Tailwind CSS, shadcn/ui, and Lucide React configured with Yarn",
+    "Next.js template with Tailwind CSS and Lucide React configured with Yarn",
 };
 
 export default function RootLayout({

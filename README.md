@@ -1,10 +1,9 @@
 # Next.js Starter Template
 
-A modern, production-ready template built with **Next.js**, **Tailwind CSS v4**, **shadcn/ui**, and **Lucide React**, configured specifically for **Yarn**.
+A modern, production-ready template built with **Next.js**, **Tailwind CSS v4**, and **Lucide React**, configured specifically for **Yarn**.
 
 ![Next.js](https://img.shields.io/badge/Next.js-black?logo=next.js)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS_v4-38B2AC?logo=tailwind-css&logoColor=white)
-![shadcn/ui](https://img.shields.io/badge/shadcn%2Fui-black?logo=shadcnui)
 ![Lucide](https://img.shields.io/badge/Lucide_React-F56565?logo=lucide)
 ![Yarn](https://img.shields.io/badge/Yarn-2C8EBB?logo=yarn&logoColor=white)
 
@@ -13,9 +12,9 @@ A modern, production-ready template built with **Next.js**, **Tailwind CSS v4**,
 ## ✨ Features
 
 - ⚡ **Next.js (App Router)** with Turbopack for ultra-fast builds and refreshes.
-- 🎨 **Tailwind CSS v4** with CSS variables and modern theming.
-- 🧩 **shadcn/ui** with Base UI / Radix primitives and accessible components.
-- 🌟 **Lucide React** icons library.
+- 🎨 **Tailwind CSS v4** with CSS variables, pure utility classes, and modern theming.
+- 🧩 **Custom React UI Components** styled cleanly with pure Tailwind CSS.
+- 🌟 **Lucide React** modern icons library.
 - 🌓 **Dark & Light Mode** with `next-themes` and a ready-to-use `ThemeToggle` component.
 - 🧶 **Yarn Berry** setup with standard `node-modules` linker for compatibility.
 - 🛡️ **TypeScript** & **ESLint** pre-configured.
@@ -26,7 +25,6 @@ A modern, production-ready template built with **Next.js**, **Tailwind CSS v4**,
 
 ```
 ├── .yarnrc.yml             # Yarn configuration (nodeLinker: node-modules)
-├── components.json         # shadcn/ui configuration
 ├── package.json
 ├── tsconfig.json
 ├── src/
@@ -37,7 +35,7 @@ A modern, production-ready template built with **Next.js**, **Tailwind CSS v4**,
 │   ├── components/
 │   │   ├── theme-provider.tsx # next-themes provider wrapper
 │   │   ├── theme-toggle.tsx   # Light / Dark / System mode toggle
-│   │   └── ui/             # shadcn/ui components
+│   │   └── ui/             # Pure Tailwind CSS components
 │   │       ├── avatar.tsx
 │   │       ├── badge.tsx
 │   │       ├── button.tsx
@@ -86,21 +84,9 @@ yarn lint
 
 ---
 
-## 🛠️ Adding More shadcn/ui Components
+## 🎨 Tailwind CSS Components
 
-You can add any shadcn component using the CLI:
-
-```bash
-npx shadcn@latest add <component-name>
-```
-
-For example:
-
-```bash
-npx shadcn@latest add sheet
-npx shadcn@latest add tabs
-npx shadcn@latest add select
-```
+All UI components in `src/components/ui` (`Button`, `Card`, `Dialog`, `DropdownMenu`, `Input`, `Badge`, `Avatar`, `Tooltip`, `Separator`) are built with pure React and Tailwind CSS v4, with zero external UI component dependencies.
 
 ---
 
@@ -109,7 +95,8 @@ npx shadcn@latest add select
 Import any icon directly from `lucide-react`:
 
 ```tsx
-import { Sparkles, ArrowRight, Heart } from "lucide-react";
+import { Sparkles, ArrowRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export function Example() {
   return (

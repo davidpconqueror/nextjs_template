@@ -76,9 +76,9 @@ export default function Home() {
       icon: Palette,
     },
     {
-      name: "shadcn/ui",
-      version: "Customizable Components",
-      description: "Accessible, composable UI building blocks.",
+      name: "Tailwind UI",
+      version: "Pure CSS",
+      description: "Fast, flexible, responsive components styled purely with Tailwind CSS.",
       icon: Layers,
     },
     {
@@ -116,12 +116,12 @@ export default function Home() {
 
           <div className="flex items-center gap-2 sm:gap-3">
             <a
-              href="https://ui.shadcn.com"
+              href="https://tailwindcss.com"
               target="_blank"
               rel="noreferrer"
               className="text-xs sm:text-sm font-medium text-muted-foreground hover:text-foreground transition-colors hidden md:block"
             >
-              shadcn/ui Docs
+              Tailwind CSS
             </a>
             <a
               href="https://nextjs.org/docs"
@@ -146,15 +146,15 @@ export default function Home() {
             </Badge>
 
             <h1 className="text-4xl font-extrabold tracking-tight sm:text-6xl text-foreground">
-              Next.js + Tailwind +{" "}
-              <span className="bg-gradient-to-r from-blue-600 via-violet-600 to-indigo-600 bg-clip-text text-transparent dark:from-blue-400 dark:via-violet-400 dark:to-indigo-400">
-                shadcn/ui
+              Next.js +{" "}
+              <span className="bg-gradient-to-r from-teal-500 via-cyan-500 to-blue-500 bg-clip-text text-transparent dark:from-teal-400 dark:via-cyan-400 dark:to-blue-400">
+                Tailwind CSS
               </span>
             </h1>
 
             <p className="mt-6 text-base text-muted-foreground sm:text-lg leading-relaxed max-w-2xl">
               Configured with <strong>Yarn</strong>, modern <strong>Tailwind CSS v4</strong>, 
-              accessible <strong>shadcn/ui</strong> components, and <strong>Lucide React</strong> icons.
+              lightweight accessible UI components, and <strong>Lucide React</strong> icons.
             </p>
 
             {/* Quick Actions */}
@@ -175,7 +175,7 @@ export default function Home() {
                       Welcome to your new project!
                     </DialogTitle>
                     <DialogDescription>
-                      This dialog is powered by shadcn/ui. You can customize any component in{" "}
+                      This dialog is powered by pure Tailwind CSS. You can customize any component in{" "}
                       <code className="text-foreground bg-muted px-1.5 py-0.5 rounded text-xs">
                         src/components/ui
                       </code>
@@ -188,19 +188,19 @@ export default function Home() {
                       <li>Next.js App Router with TypeScript</li>
                       <li>Tailwind CSS v4 with CSS variables</li>
                       <li>Dark / Light Mode theme switching</li>
-                      <li>Pre-installed shadcn components</li>
+                      <li>Pure Tailwind UI components</li>
                       <li>Lucide icons library</li>
                     </ul>
                   </div>
-                  <DialogFooter showCloseButton>
+                  <DialogFooter>
                     <Button
                       onClick={() =>
-                        copyToClipboard("npx shadcn@latest add sheet")
+                        copyToClipboard("yarn dev")
                       }
                       className="gap-1.5"
                     >
                       <Copy className="h-3.5 w-3.5" />
-                      Copy Add Command
+                      Copy Dev Command
                     </Button>
                   </DialogFooter>
                 </DialogContent>
@@ -308,7 +308,7 @@ export default function Home() {
               <div>
                 <h2 className="text-2xl font-bold tracking-tight">Interactive Playground</h2>
                 <p className="text-sm text-muted-foreground mt-1">
-                  Preview how shadcn/ui components look and feel in both light & dark modes.
+                  Preview how Tailwind CSS components look and feel in both light & dark modes.
                 </p>
               </div>
               <div className="flex items-center gap-3">
@@ -390,7 +390,7 @@ export default function Home() {
                 { cmd: "yarn build", desc: "Create optimized production build" },
                 { cmd: "yarn lint", desc: "Run ESLint code checks" },
                 { cmd: "yarn add <pkg>", desc: "Install a new package with Yarn" },
-                { cmd: "npx shadcn@latest add <component>", desc: "Add any shadcn component" },
+                { cmd: "yarn test", desc: "Run test suite" },
                 { cmd: "yarn start", desc: "Start production server" },
               ].map(({ cmd, desc }) => (
                 <div
@@ -420,7 +420,7 @@ export default function Home() {
       <footer className="border-t border-border/40 py-8 bg-muted/20">
         <div className="container mx-auto flex max-w-6xl flex-col sm:flex-row items-center justify-between gap-4 px-4 sm:px-6 text-xs text-muted-foreground">
           <p>
-            Built with Next.js, Tailwind CSS, shadcn/ui, Lucide React & Yarn.
+            Built with Next.js, Tailwind CSS, Lucide React & Yarn.
           </p>
           <div className="flex items-center gap-4">
             <a
